@@ -13,6 +13,6 @@
 	"description": "Texture Pack DeCody. Thats it.",
 	"early-load": true,
 	"resources": {
-		"files": [ "DeCody-TP-2.2/*", "icons/*" ]
+		"files": [ "DeCody-TP-2.2/**/*" ]
 	}
 }

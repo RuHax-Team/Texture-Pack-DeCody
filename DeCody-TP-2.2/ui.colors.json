@@ -1,0 +1,26 @@
+{
+	"chest-opened-overlay": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 0
+	},
+	"25-chest-opened-overlay": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 0
+	},
+	"50-chest-opened-overlay": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 0
+	},
+	"100-chest-opened-overlay": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 0
+	}
+}
