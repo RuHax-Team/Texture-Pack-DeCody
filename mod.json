@@ -6,9 +6,13 @@
 		"mac": "2.2074",
 		"ios": "2.2074"
 	},
-	"id": "user95401.texture_pack_decody",
+	"id": "ruhaxteam.decody-pack2",
 	"name": "Texture Pack DeCody",
-	"version": "v1.0.0",
-	"developer": "user95401",
-	"description": "Texture Pack DeCody. Thats it."
+	"version": "v1.4.2",
+	"developer": "RuHax Team",
+	"description": "Texture Pack DeCody. Thats it.",
+	"early-load": true,
+	"resources": {
+		"files": [ "DeCody-TP-2.2/*", "icons/*" ]
+	}
 }
