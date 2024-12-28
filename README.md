@@ -1,4 +1,4 @@
-We made a modification texture pack for youtuber **Decody**.
+We made a modification texture pack for youtuber **DeCody**.
 This is the official version!
 Created by RuHax team
 In the mod we made small changes that would be interesting to use it.
