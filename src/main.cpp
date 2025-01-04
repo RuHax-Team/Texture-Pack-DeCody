@@ -38,14 +38,14 @@ static auto fserr = std::error_code();
 
 bool isSnowdays() {
     time_t now = time(0);
-    tm* ltm = localtime(&now);
-    if (ltm == nullptr) {
+    tm* gmt = gmtime(&now);
+    if (gmt == nullptr) {
         return false;
     }
 
-    int month = ltm->tm_mon;
-    std::vector<int> snowMonths = { 11, 0, 1 };
+    int month = gmt->tm_mon;
 
+    std::vector<int> snowMonths = { 11, 0, 1 };
     return std::find(snowMonths.begin(), snowMonths.end(), month) != snowMonths.end();
 }
 
