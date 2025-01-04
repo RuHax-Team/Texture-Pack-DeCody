@@ -36,10 +36,17 @@ bool rndb(int rarity = 1) {
 #include "glob.hpp"
 static auto fserr = std::error_code();
 
-auto isSnowdays() {
+bool isSnowdays() {
     time_t now = time(0);
     tm* ltm = localtime(&now);
-    return string::containsAny(fmt::format("'{}'", ltm->tm_mon), { "'11'", "'0'", "'1'" });
+    if (ltm == nullptr) {
+        return false;
+    }
+
+    int month = ltm->tm_mon;
+    std::vector<int> snowMonths = { 11, 0, 1 };
+
+    return std::find(snowMonths.begin(), snowMonths.end(), month) != snowMonths.end();
 }
 
 void onLoaded() {
@@ -244,3 +251,22 @@ class $modify(CCApplicationLinksReplace, CCApplication) {
         return CCApplication::openURL(url);
     }
 };
+
+//#include <Geode/modify/CCSprite.hpp>
+//class $modify(SpecialSprites, CCSprite) {
+//    static void onModify(auto & self) {
+//        auto names = {
+//            "cocos2d::CCSprite::create",
+//            "cocos2d::CCSprite::createWithSpriteFrameName",
+//        };
+//        for (auto name : names) if (!self.setHookPriorityPost(name, Priority::Last)) {
+//            log::error("Failed to set hook priority for {}.", name);
+//        }
+//    }
+//    $override static CCSprite* create(const char* pszFileName) {
+//        return CCSprite::create("diffIcon_10_btn_001.png");
+//    }
+//    $override static CCSprite* createWithSpriteFrameName(const char* pszSpriteFrameName) {
+//        return CCSprite::create("diffIcon_10_btn_001.png");
+//    }
+//};
