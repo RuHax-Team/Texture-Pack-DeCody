@@ -55,6 +55,7 @@ void onLoaded() {
     // Match on a single pattern
     for (auto& p : glob::glob(getMod()->getResourcesDir().string() + "/*.*.*")) {
         auto name = p.filename().string();
+        log::error("filename {}", name);
         std::reverse(name.begin(), name.end());
         auto should_replace = false;
         for (auto& ch : name) {
