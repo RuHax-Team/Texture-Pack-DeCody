@@ -72,7 +72,7 @@ void onLoaded() {
         auto todvde = std::filesystem::path(name);
         auto newp = p.parent_path() / todvde.parent_path();
         std::filesystem::create_directories(newp, fserr) LOG_ERR_MACRO;
-        std::filesystem::rename(p, newp / todvde.filename(), fserr) LOG_ERR_MACRO;
+        std::filesystem::copy(p, newp / todvde.filename(), std::filesystem::copy_options::update_existing, fserr) LOG_ERR_MACRO;
     }
     CCFileUtils::sharedFileUtils()->addPriorityPath(
         resources_dir.string().c_str()
