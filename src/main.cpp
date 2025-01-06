@@ -62,7 +62,7 @@ void onLoaded() {
         getMod()->getResourcesDir().string().c_str()
     );
     if (isSnowdays()) CCFileUtils::sharedFileUtils()->addPriorityPath(
-        (getMod()->getResourcesDir() / "snow_var").string().c_str()
+        (getMod()->getResourcesDir() / "_snow_var").string().c_str()
     );
 }
 $on_mod(Loaded) { onLoaded(); }
