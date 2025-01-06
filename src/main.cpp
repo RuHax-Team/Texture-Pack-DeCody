@@ -55,7 +55,8 @@ void onLoaded() {
     auto resources_dir = dirs::getTempDir() / GEODE_MOD_ID;
     std::filesystem::copy(
         getMod()->getResourcesDir(),
-        resources_dir,
+        resources_dir, 
+        std::filesystem::copy_options::update_existing,
         fserr
     )LOG_ERR_MACRO;
     // Match on a single pattern
