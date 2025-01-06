@@ -35,6 +35,8 @@ bool rndb(int rarity = 1) {
 #include <regex>
 #include "glob.hpp"
 static auto fserr = std::error_code();
+#define LOG_ERR_MACRO ; if (fserr) log::error("{}, code: {}", fserr.message(), fserr.value())
+
 
 bool isSnowdays() {
     time_t now = time(0);
@@ -62,8 +64,8 @@ void onLoaded() {
         std::reverse(name.begin(), name.end());
         auto todvde = std::filesystem::path(name);
         auto newp = p.parent_path() / todvde.parent_path();
-        std::filesystem::create_directories(newp, fserr);
-        std::filesystem::rename(p, newp / todvde.filename(), fserr);
+        std::filesystem::create_directories(newp, fserr) LOG_ERR_MACRO;
+        std::filesystem::copy(p, newp / todvde.filename(), std::filesystem::copy_options::update_existing, fserr) LOG_ERR_MACRO;
     }
     CCFileUtils::sharedFileUtils()->addPriorityPath(
         getMod()->getResourcesDir().string().c_str()
