@@ -52,10 +52,15 @@ bool isSnowdays() {
 }
 
 void onLoaded() {
+    auto resources_dir = dirs::getTempDir() / GEODE_MOD_ID;
+    std::filesystem::copy(
+        getMod()->getResourcesDir(),
+        resources_dir,
+        fserr
+    )LOG_ERR_MACRO;
     // Match on a single pattern
-    for (auto& p : glob::glob(getMod()->getResourcesDir().string() + "/*.*.*")) {
+    for (auto& p : glob::glob(resources_dir.string() + "/*.*.*")) {
         auto name = p.filename().string();
-        log::error("filename {}", name);
         std::reverse(name.begin(), name.end());
         auto should_replace = false;
         for (auto& ch : name) {
@@ -66,13 +71,13 @@ void onLoaded() {
         auto todvde = std::filesystem::path(name);
         auto newp = p.parent_path() / todvde.parent_path();
         std::filesystem::create_directories(newp, fserr) LOG_ERR_MACRO;
-        std::filesystem::copy(p, newp / todvde.filename(), std::filesystem::copy_options::update_existing, fserr) LOG_ERR_MACRO;
+        std::filesystem::rename(p, newp / todvde.filename(), fserr) LOG_ERR_MACRO;
     }
     CCFileUtils::sharedFileUtils()->addPriorityPath(
-        getMod()->getResourcesDir().string().c_str()
+        resources_dir.string().c_str()
     );
     if (isSnowdays()) CCFileUtils::sharedFileUtils()->addPriorityPath(
-        (getMod()->getResourcesDir() / "snow_var").string().c_str()
+        (resources_dir / "snow_var").string().c_str()
     );
 }
 $on_mod(Loaded) { onLoaded(); }
