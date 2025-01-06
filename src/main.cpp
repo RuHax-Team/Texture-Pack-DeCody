@@ -35,32 +35,16 @@ bool rndb(int rarity = 1) {
 #include <regex>
 #include "glob.hpp"
 static auto fserr = std::error_code();
-#define LOG_ERR_MACRO ; if (fserr) log::error("{}, code: {}", fserr.message(), fserr.value())
 
-
-bool isSnowdays() {
+auto isSnowdays() {
     time_t now = time(0);
-    tm* gmt = gmtime(&now);
-    if (gmt == nullptr) {
-        return false;
-    }
-
-    int month = gmt->tm_mon;
-
-    std::vector<int> snowMonths = { 11, 0, 1 };
-    return std::find(snowMonths.begin(), snowMonths.end(), month) != snowMonths.end();
+    tm* ltm = localtime(&now);
+    return string::containsAny(fmt::format("'{}'", ltm->tm_mon), { "'11'", "'0'", "'1'" });
 }
 
 void onLoaded() {
-    auto resources_dir = dirs::getTempDir() / GEODE_MOD_ID;
-    std::filesystem::copy(
-        getMod()->getResourcesDir(),
-        resources_dir, 
-        std::filesystem::copy_options::update_existing,
-        fserr
-    )LOG_ERR_MACRO;
     // Match on a single pattern
-    for (auto& p : glob::glob(resources_dir.string() + "/*.*.*")) {
+    for (auto& p : glob::glob(getMod()->getResourcesDir().string() + "/*.*.*")) {
         auto name = p.filename().string();
         std::reverse(name.begin(), name.end());
         auto should_replace = false;
@@ -71,14 +55,14 @@ void onLoaded() {
         std::reverse(name.begin(), name.end());
         auto todvde = std::filesystem::path(name);
         auto newp = p.parent_path() / todvde.parent_path();
-        std::filesystem::create_directories(newp, fserr) LOG_ERR_MACRO;
-        std::filesystem::copy(p, newp / todvde.filename(), std::filesystem::copy_options::update_existing, fserr) LOG_ERR_MACRO;
+        std::filesystem::create_directories(newp, fserr);
+        std::filesystem::rename(p, newp / todvde.filename(), fserr);
     }
     CCFileUtils::sharedFileUtils()->addPriorityPath(
-        resources_dir.string().c_str()
+        getMod()->getResourcesDir().string().c_str()
     );
     if (isSnowdays()) CCFileUtils::sharedFileUtils()->addPriorityPath(
-        (resources_dir / "snow_var").string().c_str()
+        (getMod()->getResourcesDir() / "snow_var").string().c_str()
     );
 }
 $on_mod(Loaded) { onLoaded(); }
@@ -260,22 +244,3 @@ class $modify(CCApplicationLinksReplace, CCApplication) {
         return CCApplication::openURL(url);
     }
 };
-
-//#include <Geode/modify/CCSprite.hpp>
-//class $modify(SpecialSprites, CCSprite) {
-//    static void onModify(auto & self) {
-//        auto names = {
-//            "cocos2d::CCSprite::create",
-//            "cocos2d::CCSprite::createWithSpriteFrameName",
-//        };
-//        for (auto name : names) if (!self.setHookPriorityPost(name, Priority::Last)) {
-//            log::error("Failed to set hook priority for {}.", name);
-//        }
-//    }
-//    $override static CCSprite* create(const char* pszFileName) {
-//        return CCSprite::create("diffIcon_10_btn_001.png");
-//    }
-//    $override static CCSprite* createWithSpriteFrameName(const char* pszSpriteFrameName) {
-//        return CCSprite::create("diffIcon_10_btn_001.png");
-//    }
-//};
